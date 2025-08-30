@@ -1,0 +1,32 @@
+services:
+  pihole-tailscale:
+    image: tailscale/tailscale:latest
+    hostname: pihole
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    devices:
+      - /dev/net/tun
+    environment:
+      - TS_AUTH_KEY=${TS_AUTH_KEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_HOSTNAME=pihole
+      - TS_ACCEPT_DNS=false # don't rewrite resolv.conf inside container
+    volumes:
+      - ./tailscale:/var/lib/tailscale
+  pihole:
+    image: pihole/pihole:latest
+    network_mode: service:pihole-tailscale # piggy back
+    depends_on:
+      - pihole-tailscale
+    environment:
+      - TZ=UTC
+      - WEBPASSWORD=change-me
+      - DNSMASQ_LISTENING=single
+      - INTERFACE=tailscale0
+    volumes:
+      - ./etc-pihole:/etc/pihole
+      - ./etc-dnsmasq.d:/etc/dnsmasq.d
+    restart: unless-stopped
+    # no ports: published ~ TS will be the only way in but change as necessary :P
+networks: {}
