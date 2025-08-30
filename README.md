@@ -192,6 +192,3 @@ Keep `DNSMASQ_LISTENING=all` on Pi-hole. Everything else stays the same.
 * State is persisted in `./tailscale`, `./etc-pihole`, `./etc-dnsmasq.d`.
 * If you later want the node to accept advertised routes or be an exit node, add the appropriate `TS_EXTRA_ARGS` to the Tailscale service (outside the scope of this minimal setup).
 
----
-
-Happy blocking ✨ If you want a one-liner badge or a diagram for the repo, say the word and I’ll add it.
